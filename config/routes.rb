@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
-  get 'pages/hello'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  root 'pages#hello'
-  # Defines the root path route ("/")
-  # root "articles#index"
+  namespace :api, defaults: { format: 'json' } do
+    get '/greetings', to: 'greetings#index'
+  end
+
+  get '*page', to: 'static#index', constraints: ->(req) do
+    !req.xhr? && req.format.html?
+  end
+
+  root 'static#index'
 end
